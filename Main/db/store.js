@@ -2,7 +2,7 @@ const util = require('util');
 const fs = require('fs');
 
 //this package will be used to generate our unique ids
-const uuidv1 = require('uuid/v1');
+const { v4: uuidv4 } = require('uuid');
 
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -13,7 +13,7 @@ class Store {
     }
 
     write(note) {
-        return writeFileSync('./db/db.json', JSON.stringify(note));
+        return writeFileAsync('./db/db.json', JSON.stringify(note));
     }
 
     getNotes() {
@@ -39,7 +39,7 @@ class Store {
         }
 
         //add a unique id to the note using uuid package
-        const newNote = { title, text, id: uuidv1() };
+        const newNote = { title, text, id: uuidv4() };
 
         //get all notes, add the new note, write all the updated notes, return the newNote
         return this.getNotes()
